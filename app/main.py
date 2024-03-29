@@ -111,15 +111,12 @@ class Battleship:
         if ship_decks_counts[1] != 4:
             raise CountShipError("There should be 4 single-deck ships.")
 
-            # Condition 3: 3 double-deck ships
         if ship_decks_counts[2] != 3:
             raise CountShipError("There should be 3 double-deck ships.")
 
-            # Condition 4: 2 three-deck ships
         if ship_decks_counts[3] != 2:
             raise CountShipError("There should be 2 three-deck ships.")
 
-            # Condition 5: 1 four-deck ship
         if ship_decks_counts[4] != 1:
             raise CountShipError("There should be 1 four-deck ship.")
 
