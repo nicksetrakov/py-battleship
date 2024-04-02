@@ -1,5 +1,4 @@
-from collections import Counter, defaultdict
-from itertools import combinations
+from collections import Counter
 from typing import Optional
 
 
@@ -101,7 +100,6 @@ class Battleship:
 
         battlefield += "\n└" + "───┴" * 9 + "───┘"
         print(battlefield)
-
 
     def _validate_field(self, ships: list[Ship]) -> None:
 
