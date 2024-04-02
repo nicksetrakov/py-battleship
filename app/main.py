@@ -1,4 +1,5 @@
-from collections import Counter
+from collections import Counter, defaultdict
+from itertools import combinations
 from typing import Optional
 
 
@@ -61,11 +62,12 @@ class Battleship:
         self.field = {}
 
         ships_object = [Ship(*ship) for ship in ships]
-        self._validate_field(ships_object)
 
         for ship in ships_object:
             for deck in ship.decks:
                 self.field[(deck.row, deck.column)] = ship
+
+        self._validate_field(ships_object)
 
     def fire(self, location: tuple) -> str:
 
@@ -100,8 +102,8 @@ class Battleship:
         battlefield += "\n└" + "───┴" * 9 + "───┘"
         print(battlefield)
 
-    @staticmethod
-    def _validate_field(ships: list[Ship]) -> None:
+
+    def _validate_field(self, ships: list[Ship]) -> None:
 
         if len(ships) != 10:
             raise NotEnoughShipsError("Total number of ships should be 10.")
@@ -120,16 +122,16 @@ class Battleship:
         if ship_decks_counts[4] != 1:
             raise CountShipError("There should be 1 four-deck ship.")
 
-        for ship in ships:
-            for deck in ship.decks:
-                for other_ship in ships:
-                    if other_ship is ship:
-                        continue
-                    for other_deck in other_ship.decks:
-                        if abs(deck.row - other_deck.row) <= 1 and abs(
-                                deck.column - other_deck.column
-                        ) <= 1:
-                            raise ShipPositionError(
-                                "Ships shouldn't be located in "
-                                "the neighboring cells."
-                            )
+        for location, ship in self.field.items():
+            for neighbor_row in range(location[0] - 1, location[0] + 1):
+                for neighbor_column in range(location[1] - 1, location[1] + 1):
+                    neighbor_location = (neighbor_row, neighbor_column)
+
+                    if (
+                            neighbor_location in self.field
+                            and not self.field[neighbor_location] == ship
+                    ):
+                        raise ShipPositionError(
+                            "Ships shouldn't be located in "
+                            "the neighboring cells."
+                        )
